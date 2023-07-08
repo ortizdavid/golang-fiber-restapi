@@ -1,8 +1,8 @@
 package models
 
 import (
-	"github.com/ortizdavid/golang-fiber-webapp/config"
-	"github.com/ortizdavid/golang-fiber-webapp/entities"
+	"github.com/ortizdavid/golang-fiber-restapi/config"
+	"github.com/ortizdavid/golang-fiber-restapi/entities"
 )
 
 type TaskModel struct {

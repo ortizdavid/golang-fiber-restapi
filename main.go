@@ -3,16 +3,14 @@ package main
 import (
 	"os"
 	"github.com/gofiber/fiber/v2"
-	"github.com/ortizdavid/golang-fiber-webapp/config"
-	"github.com/ortizdavid/golang-fiber-webapp/entities"
-	"github.com/ortizdavid/golang-fiber-webapp/controllers"
+	"github.com/ortizdavid/golang-fiber-restapi/config"
+	"github.com/ortizdavid/golang-fiber-restapi/entities"
+	"github.com/ortizdavid/golang-fiber-restapi/controllers"
 )
 
 func main() {
 
-	app := fiber.New(fiber.Config{
-        Views: config.GetTemplateEngine(),
-    })
+	app := fiber.New()
 
 	entities.SetupMigrations()
 	config.LoadDotEnv()

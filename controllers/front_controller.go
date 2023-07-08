@@ -6,15 +6,11 @@ type FrontController struct {
 }
 
 func (FrontController) index(ctx *fiber.Ctx) error {
-	return ctx.Render("front-office/index", fiber.Map{
-		"Title": "Golang Web App",
-	})
+	return ctx.SendString("Hello API")
 }
 
 func (FrontController) about(ctx *fiber.Ctx) error {
-	return ctx.Render("front-office/about", fiber.Map{
-		"Title": "About this Example",
-	})
+	return ctx.SendString("Hello API")
 }
 
 func (front FrontController) RegisterRoutes(router *fiber.App) {

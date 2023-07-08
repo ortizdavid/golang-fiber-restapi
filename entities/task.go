@@ -4,7 +4,6 @@ import (
 	"time"
 )
 
-
 type Task struct {
 	TaskId      	int `gorm:"primaryKey;autoIncrement"`
 	TaskName    	string `gorm:"column:task_name;type:varchar(100)"`

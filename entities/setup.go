@@ -1,6 +1,6 @@
 package entities
 
-import "github.com/ortizdavid/golang-fiber-webapp/config"
+import "github.com/ortizdavid/golang-fiber-restapi/config"
 
 func SetupMigrations() {
 	db, _ := config.ConnectDB()
