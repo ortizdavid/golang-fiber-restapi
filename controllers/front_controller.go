@@ -10,7 +10,7 @@ func (FrontController) index(ctx *fiber.Ctx) error {
 }
 
 func (FrontController) about(ctx *fiber.Ctx) error {
-	return ctx.SendString("Hello API")
+	return ctx.SendString("About API")
 }
 
 func (front FrontController) RegisterRoutes(router *fiber.App) {
