@@ -1,15 +1,14 @@
 package config
 
-import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/template/html/v2"
-)
+import "os"
 
-func ConfigStaticFiles(app *fiber.App) {
-	app.Static("/", "./static")
+
+func ListenAndServe() string {
+	LoadDotEnv()
+	return os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT")
 }
 
-func GetTemplateEngine() *html.Engine {
-	engine := html.New("./templates", ".html")
-	return engine
+func ApiSecret() string {
+	LoadDotEnv()
+	return os.Getenv("API_SECRET")
 }

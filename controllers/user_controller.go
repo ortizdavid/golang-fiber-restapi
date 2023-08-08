@@ -11,135 +11,133 @@ import (
 	"github.com/ortizdavid/golang-fiber-restapi/security"
 )
 
-type TaskController struct {
+type UserController struct {
 }
 
-func (task TaskController) RegisterRoutes(router *fiber.App) {
+func (user UserController) RegisterRoutes(router *fiber.App) {
 	jwt := security.NewAuthMiddleware(config.ApiSecret())
-	group := router.Group("/api/tasks")
-	group.Get("/", jwt, task.getAll)
-	group.Post("/", jwt, task.create)
-	group.Get("/:id", jwt, task.getTask)
-	group.Put("/:id", jwt, task.update)
-	group.Delete("/:id", jwt, task.delete)
-	group.Get("/search/:param", jwt, task.search)
-	
+	group := router.Group("/api/users")
+	group.Get("/", jwt, user.getAll)
+	group.Post("/", jwt, user.create)
+	group.Get("/:id", jwt, user.getUser)
+	group.Put("/:id", jwt, user.update)
+	group.Delete("/:id", jwt, user.delete)
+	group.Get("/search/:param", jwt, user.search)
 }
 
-func (TaskController) getAll(ctx *fiber.Ctx) error {
-	tasks := models.TaskModel{}.FindAll()
-	count := len(tasks)
+func (UserController) getAll(ctx *fiber.Ctx) error {
+	users := models.UserModel{}.FindAll()
+	count := len(users)
 	if count == 0 {
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"Error": true,
 			"Count": count,
-			"Message": "No Tasks Found",
+			"Message": "Users Not Found",
 			"Status": "Fail",
 		})
 	} else {
 		return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 			"Error": false,
 			"Count": count,
-			"Message": "All Tasks Found",
+			"Message": "All Users Found",
 			"Status": "Success",
-			"Data": tasks,
+			"Data": users,
 		})
 	}
 }
 
-func (TaskController) getTask(ctx *fiber.Ctx) error {
-	var taskModel models.TaskModel
+func (UserController) getUser(ctx *fiber.Ctx) error {
+	var userModel models.UserModel
 	id := ctx.Params("id")
 	intId := helpers.ConvertToInt(id)
-	task := taskModel.FindById(intId)
+	user := userModel.FindById(intId)
 
-	if !taskModel.Exists(intId) {
+	if !userModel.Exists(intId) {
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"Error": true,
-			"Message": "Task Does Not Exists",
+			"Message": "User Does Not Exists",
 			"Status": "Fail",
 		})
 	} else {
-
 		return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 			"Error": false,
-			"Message": "Task Found",
+			"Message": "User Found",
 			"Status": "Success",
-			"Data": task,
+			"Data": user,
 		})
 	}
 }
 
 
-func (TaskController) create(ctx *fiber.Ctx) error {
-	var taskModel models.TaskModel
-	task := new(entities.Task)
+func (UserController) create(ctx *fiber.Ctx) error {
+	var userModel models.UserModel
+	user := new(entities.User)
 	
-	err := ctx.BodyParser(task)
+	err := ctx.BodyParser(user)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).SendString(err.Error())
 	} else {
-		taskModel.Create(*task)
-		log.Printf("Task '%s' Created ", task.TaskName)
+		userModel.Create(*user)
+		log.Printf("User '%s' Created ", user.UserName)
 		return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 			"Error": false,
-			"Message": "Task Created Successfully",
+			"Message": "User Created Successfully",
 			"Status": "Success",
-			"Data": task,
+			"Data": user,
 		})
 	}
 }
 
-func (TaskController) update(ctx *fiber.Ctx) error {
-	var taskModel models.TaskModel
-	task := new(entities.Task)
+func (UserController) update(ctx *fiber.Ctx) error {
+	var userModel models.UserModel
+	user := new(entities.User)
 	id := ctx.Params("id")
-	task.TaskId = helpers.ConvertToInt(id)
+	user.UserId = helpers.ConvertToInt(id)
 
-	err := ctx.BodyParser(task)
+	err := ctx.BodyParser(user)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).SendString(err.Error())
 	} else {
-		taskModel.Update(*task)
-		log.Printf("Task '%s' Updated", task.TaskName)
+		userModel.Update(*user)
+		log.Printf("User '%s' Updated", user.UserName)
 		return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 			"Error": false,
-			"Message": "Task Updated Successfully",
+			"Message": "User Updated Successfully",
 			"Status": "Success",
-			"Data": task,
+			"Data": user,
 		})
 	}
 }
 
-func (TaskController) delete(ctx *fiber.Ctx) error {
-	var taskModel models.TaskModel
+func (UserController) delete(ctx *fiber.Ctx) error {
+	var userModel models.UserModel
 	id := ctx.Params("id")
 	intId := helpers.ConvertToInt(id)
-	task := models.TaskModel{}.FindById(intId)
+	user := models.UserModel{}.FindById(intId)
 	
-	if !taskModel.Exists(intId) {
+	if !userModel.Exists(intId) {
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"Error": true,
-			"Message": "Task Does Not Exists",
+			"Message": "User Does Not Exists",
 			"Status": "Fail",
 		})
 	} else {
-		taskModel.Delete(intId)
-		log.Printf("Task '%s' Deleted ", task.TaskName)
+		userModel.Delete(intId)
+		log.Printf("User '%s' Deleted ", user.UserName)
 		return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 			"Error": false,
-			"Message": "Task Deleted",
+			"Message": "User Deleted",
 			"Status": "Success",
 		})
 	}
 }
 
-func (TaskController) search(ctx *fiber.Ctx) error {
+func (UserController) search(ctx *fiber.Ctx) error {
 	param := ctx.Params("param")
-	results := models.TaskModel{}.Search(param)
+	results := models.UserModel{}.Search(param)
 	count := len(results)
 
-	log.Printf("Search for Task '%v' and %v Results Founds", param, count)
+	log.Printf("Search for User '%v' and %v Results Founds", param, count)
 	if count == 0 {
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"Error": true,

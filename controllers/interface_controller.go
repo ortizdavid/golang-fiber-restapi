@@ -8,7 +8,6 @@ type InterfaceController interface {
 	create(ctx *fiber.Ctx) error
 	update(ctx *fiber.Ctx) error
 	delete(ctx *fiber.Ctx) error
-	form(ctx *fiber.Ctx) error
 	search(ctx *fiber.Ctx) error
 	RegisterRoutes(router *fiber.App)
 }
